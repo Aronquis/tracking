@@ -1,0 +1,212 @@
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A datetime and timezone string in ISO 8601 format `Y-m-dTH:i:sO`, e.g. `2020-04-20T13:53:12+02:00`."
+scalar DateTimeTz @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTimeTz")
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload
+  @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+type Query {
+    GetListaServicos(IdChofer:String,page:Int,number_paginate:Int):GetListaServicos @field(resolver: "ListaServicios@GetListaServicios")
+    GetListaGuias(IdServicio:Int):[ListaGuias!] @field(resolver: "ListaGuias@GetListaGuias")
+    GetGuiasUsuarios(number_paginate:Int,page:Int,IdServicio:String):GetGuiasCliente @field(resolver: "GuiasCliente@GetGuiasCliente")
+    GetSerieGuiasUsuarios(IdGuiaR:Int):GuiasCliente @field(resolver: "GuiasCliente@GetSerieGuiasCliente")
+    GetGuiasTrack(IdGuiaR:String):[GuiasTrack] @field(resolver: "GuiasTrack@GetGuiasTrack")
+
+    GetClientes:Clientes @field(resolver: "Clientes@GetClientes")
+    #GetIdClientes(IdCliente:Int):Clientes @field(resolver: "Clientes@GetIDClientes")
+}
+
+type GetGuiasCliente{
+    nroTotal_items:Int
+    data:[GuiasCliente!]
+}
+type GetListaServicos{
+    nroTotal_items:Int
+    data:[ListaServicios!]
+}
+type Imagenes{
+    id:ID
+    descripcion:String
+    url:String
+}
+input ImagenesInput{
+    id:ID
+    descripcion:String
+    url:String
+}
+
+type User {
+    IdUsuario:Int
+    NmUsuario:String
+    #Password:String
+    IdPerfil:Int
+    IdChofer:Int
+    IdCliente:Int
+    apiToken:String
+}
+
+input UserInput {
+    IdUsuario:Int
+    NmUsuario:String
+    Password:String
+    IdPerfil:Int
+    IdChofer:Int
+    IdCliente:Int
+}
+
+type ListaServicios{
+    IdServicio:Int
+    Fecha:String
+    Tipo:String
+    Placa1:String
+    Chofer:String
+    NmEstado:String
+    IdPlaca1:Int
+    IdChofer:Int
+    IdEstado:Int
+}
+input ListaServiciosInput{
+    IdServicio:Int
+    Fecha:String
+    Tipo:String
+    Placa1:String
+    Chofer:String
+    NmEstado:String
+    IdPlaca1:Int
+    IdChofer:Int
+    IdEstado:Int
+}
+type GuiasCliente{
+    IdGuiaR:Int
+    Serie:String
+    Numero:Int
+    Fecha:String
+    Llegada:String
+    Bultos:Int
+    Peso:Float
+    FechaEntrega:String
+    Coordenadas:String
+    ImagenGuia:String
+    SerieGT:String
+    NumeroGT:Int
+    IdServicio:Int
+    IdCliente:Int
+    IdDestino:Int
+    IdEstado:Int
+    GuiasTrack:[GuiasTrack!]
+}
+input GuiasClienteInput{
+    IdGuiaR:Int
+    Serie:String
+    Numero:Int
+    Fecha:String
+    Llegada:String
+    Bultos:Int
+    Peso:Float
+    FechaEntrega:String
+    Coordenadas:String
+    ImagenGuia:String
+    SerieGT:String
+    NumeroGT:Int
+    IdServicio:Int
+    IdCliente:Int
+    IdDestino:Int
+    IdEstado:Int
+}
+type GuiasTrack{
+    IdGuiaR:Int
+    FechaHora:String
+    Coordenadas:String
+    Obs:String
+    IdEstado:Int
+}
+input GuiasTrackInput{
+    IdGuiaR:Int
+    FechaHora:String
+    Coordenadas:String
+    Obs:String
+    IdEstado:Int
+}
+type Clientes{
+    IdCliente:Int
+    RUC:String
+    RazonSocial:String
+}
+input ClientesInput{
+    IdCliente:Int
+    RUC:String
+    RazonSocial:String
+}
+type ListaGuias{
+    IdGuiaR:Int
+    IdServicio:Int
+    IdCliente:Int
+    Serie:String
+    Numero:String
+    Fecha:String
+    Cliente:String
+    Destinatario:String
+    Llegada:String
+    Bultos:Int
+    Peso:Float
+    SerieGT:String
+    NumeroGT:String
+    NmEstado:String
+    FechaEntrega:String
+    Coordenadas:String
+    ImagenGuia:String
+    IdDestino:Int
+    IdEstado:Int
+}
+input ListaGuiasInput{
+    IdGuiaR:Int
+    IdServicio:Int
+    IdCliente:Int
+    Serie:String
+    Numero:String
+    Fecha:String
+    Cliente:String
+    Destinatario:String
+    Llegada:String
+    Bultos:Int
+    Peso:Float
+    SerieGT:String
+    NumeroGT:String
+    NmEstado:String
+    FechaEntrega:String
+    Coordenadas:String
+    ImagenGuia:String
+    IdDestino:Int
+    IdEstado:Int
+}
+type Mutation {
+    createGuiasTrack(
+        input:GuiasTrackInput! @spread
+    ):GuiasTrack @field(resolver: "CrudGuiasTrack@Create")
+    updateGuiasTrack(
+        input:GuiasTrackInput! @spread
+    ):GuiasTrack @field(resolver: "CrudGuiasTrack@Update")
+    deleteGuiasTrack(
+        input:GuiasTrackInput! @spread
+    ):String @field(resolver: "CrudGuiasTrack@Delete")
+
+    createGuiasCliente(
+        input:GuiasClienteInput! @spread,
+        ImagenGuia:Upload
+    ):GuiasCliente @field(resolver: "CrudGuiasCliente@Create")
+    updateGuiasCliente(
+        input:GuiasClienteInput! @spread,
+        ImagenGuia:Upload
+    ):GuiasCliente @field(resolver: "CrudGuiasCliente@Update")
+    deleteGuiasCliente(
+        input:GuiasClienteInput! @spread
+    ):String @field(resolver: "CrudGuiasCliente@Delete")
+
+    login(
+        input:UserInput! @spread
+    ): User @field(resolver: "AuthMutator@auth")
+}
