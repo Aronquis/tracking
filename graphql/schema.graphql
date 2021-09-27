@@ -98,6 +98,7 @@ type GuiasCliente{
     IdDestino:Int
     IdEstado:Int
     GuiasTrack:[GuiasTrack!]
+    
 }
 input GuiasClienteInput{
     IdGuiaR:Int
