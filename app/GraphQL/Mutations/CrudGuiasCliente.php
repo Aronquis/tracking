@@ -46,7 +46,7 @@ class CrudGuiasCliente
             'IdServicio'=>$args['IdServicio'],
             'IdCliente'=>$args['IdCliente'],
             'IdDestino'=>$args['IdDestino'],
-            'ImagenGuia'=>env('APP_URL').'ImagenGuia/'.date("Y").'-'.date("m").$nameCreate,
+            'ImagenGuia'=>env('APP_URL').'ImagenGuia/'.date("Y").'-'.date("m").'/'.$nameCreate,
             'IdEstado'=>$args['IdEstado'],
 
         ]);
@@ -65,7 +65,7 @@ class CrudGuiasCliente
         
             $nameCreate =$fileName. '.' .$extension;
             $image->storeAs('ImagenGuia/'.date("Y").'-'.date("m"), $nameCreate, 'local');
-            DB::table('dbo.vWebListaGuias')->where('ImagenGuia',$args['ImagenGuia'])->update(['ImagenGuia'=>$nameCreate]);
+            DB::table('dbo.vWebListaGuias')->where('ImagenGuia',$args['ImagenGuia'])->update(['ImagenGuia'=>env('APP_URL').'ImagenGuia/'.date("Y").'-'.date("m").'/'.$nameCreate]);
         }
         DB::table('dbo.vWebListaGuias')->where('IdGuiaR',$args['IdGuiaR'])->update([
             'Serie'=>$args['Serie'],
