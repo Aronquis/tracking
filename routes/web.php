@@ -17,6 +17,6 @@ use App\User;
 */
 
 Route::get('/', function () {
-      @$asesor=DB::table('dbo.vWebClientes')->get();
+      @$asesor=DB::table('dbo.vWebClientesDestinos')->get();
       dd($asesor);
 });

@@ -17,6 +17,7 @@ type Query {
     GetGuiasTrack(IdGuiaR:String):[GuiasTrack] @field(resolver: "GuiasTrack@GetGuiasTrack")
 
     GetClientes:Clientes @field(resolver: "Clientes@GetClientes")
+    GetDestinosClientes:[ClientesDestinos!] @field(resolver: "DestinosCliente@GetDestinosCliente")
     #GetIdClientes(IdCliente:Int):Clientes @field(resolver: "Clientes@GetIDClientes")
 }
 
@@ -38,7 +39,6 @@ input ImagenesInput{
     descripcion:String
     url:String
 }
-
 type User {
     IdUsuario:Int
     NmUsuario:String
@@ -98,6 +98,8 @@ type GuiasCliente{
     IdDestino:Int
     IdEstado:Int
     GuiasTrack:[GuiasTrack!]
+    ClientesDestinos:ClientesDestinos
+    Clientes:Clientes
     
 }
 input GuiasClienteInput{
@@ -162,6 +164,8 @@ type ListaGuias{
     ImagenGuia:String
     IdDestino:Int
     IdEstado:Int
+    ClientesDestinos:ClientesDestinos
+    
 }
 input ListaGuiasInput{
     IdGuiaR:Int
@@ -183,8 +187,21 @@ input ListaGuiasInput{
     ImagenGuia:String
     IdDestino:Int
     IdEstado:Int
+    
+}
+type ClientesDestinos{
+    IdDestino:Int
+    IdCliente:Int
+    Destino:String
+    Clientes:[Clientes!]
+}
+input ClientesDestinosInput{
+    IdDestino:Int
+    IdCliente:Int
+    Destino:String
 }
 type Mutation {
+
     createGuiasTrack(
         input:GuiasTrackInput! @spread
     ):GuiasTrack @field(resolver: "CrudGuiasTrack@Create")

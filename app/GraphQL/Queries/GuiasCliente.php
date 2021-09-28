@@ -27,6 +27,10 @@ class GuiasCliente
         foreach ($GuiasCliente as $GuiasClientes) {
             # code...
             $GuiasClientes->GuiasTrack=DB::table('dbo.WebGuiasTrack')->where('IdGuiaR', $GuiasClientes->IdGuiaR)->get();
+            $GuiasClientes->ClientesDestinos=DB::table('dbo.vWebClientesDestinos')->where('IdDestino', $GuiasClientes->IdDestino)->first();
+            $GuiasClientes->ClientesDestinos->Clientes=DB::table('dbo.vWebClientes')->where('IdCliente', $GuiasClientes->ClientesDestinos->IdDestino)->get();
+            $GuiasClientes->Clientes=DB::table('dbo.vWebClientes')->where('IdCliente', $GuiasClientes->IdCliente)->first();
+            
         }
 
         return ['nroTotal_items'=>$GuiasCliente->total(),'data'=>$GuiasCliente];
@@ -35,12 +39,14 @@ class GuiasCliente
     public function GetSerieGuiasCliente($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         // TODO implement the resolver
-       
-        $GuiasCliente = DB::table('dbo.WebGuiasCliente')
+        $GuiasClientes = DB::table('dbo.WebGuiasCliente')
             ->where('IdGuiaR',$args['IdGuiaR'])
             ->first();
-
-        return $GuiasCliente;
+        $GuiasClientes->GuiasTrack=DB::table('dbo.WebGuiasTrack')->where('IdGuiaR', $GuiasClientes->IdGuiaR)->get();
+        $GuiasClientes->ClientesDestinos=DB::table('dbo.vWebClientesDestinos')->where('IdDestino', $GuiasClientes->IdDestino)->first();
+        $GuiasClientes->ClientesDestinos->Clientes=DB::table('dbo.vWebClientes')->where('IdCliente', $GuiasClientes->ClientesDestinos->IdDestino)->get();
+        $GuiasClientes->Clientes=DB::table('dbo.vWebClientes')->where('IdCliente', $GuiasClientes->IdCliente)->first();
+        return $GuiasClientes;
         
     }
 }
